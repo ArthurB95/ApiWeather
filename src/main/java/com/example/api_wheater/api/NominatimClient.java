@@ -9,13 +9,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class NominatimClient {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final NominatimProperties nominatimProperties;
 
-    public NominatimClient(NominatimProperties nominatimProperties) {
+    public NominatimClient(RestTemplate restTemplate, NominatimProperties nominatimProperties) {
+        this.restTemplate = restTemplate;
         this.nominatimProperties = nominatimProperties;
     }
-
 
     public Location getLocation(String zipCode) {
         try {

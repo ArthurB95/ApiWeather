@@ -13,10 +13,11 @@ import java.util.List;
 
 @Component
 public class OpenMeteoClient {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final OpenMeteoProperties openMeteoProperties;
 
-    public OpenMeteoClient(OpenMeteoProperties openMeteoProperties) {
+    public OpenMeteoClient(RestTemplate restTemplate, OpenMeteoProperties openMeteoProperties) {
+        this.restTemplate = restTemplate;
         this.openMeteoProperties = openMeteoProperties;
     }
 
