@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/weather")
 public class WeatherController {
-    @Autowired
     private final WeatherService weatherService;
+    private final CacheManager cacheManager;
 
-    @Autowired
-    private CacheManager cacheManager;
-
-    public WeatherController(WeatherService weatherService) {
+    public WeatherController(WeatherService weatherService, CacheManager cacheManager) {
         this.weatherService = weatherService;
+        this.cacheManager = cacheManager;
     }
 
     @GetMapping
