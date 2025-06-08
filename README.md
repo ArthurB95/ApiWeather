@@ -34,6 +34,16 @@ Develop API services capable of retrieving weather forecasts for a specific loca
 4. Implement caching to store forecast details for a duration of 15 minutes for subsequent requests using the same zip code.
 5. Display an indicator to notify users if the result is retrieved from the cache.
 
+The two API's used for this project were **[Nominatim](https://nominatim.org/release-docs/develop/api/Search/#endpoint)** for geolocation and **[Open-meteo](https://open-meteo.com/en/docs)** to see the past location weather
+
+I have made some zip codes available below so that you can perform the tests you want:
+```
+- 60140-061 or 60140061
+- 90010-190 or 90010190 
+- 41745-001 or 41745001
+- 30180-111 or 30180111
+```
+
 ## How to Use
 
 This section provides comprehensive instructions for setting up and running the ApiWeather application.
