@@ -7,21 +7,18 @@ import com.example.api_wheater.exception.GeneralServiceException;
 import com.example.api_wheater.exception.GeolocationApiException;
 import com.example.api_wheater.exception.WeatherApiException;
 import com.example.api_wheater.model.WeatherResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
-
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class WeatherService {
     private final NominatimClient nominatimClient;
     private final OpenMeteoClient openMeteoClient;
-
-    public WeatherService(NominatimClient nominatimClient,
-                          OpenMeteoClient openMeteoClient) {
-        this.nominatimClient = nominatimClient;
-        this.openMeteoClient = openMeteoClient;
-    }
 
     @Cacheable(value = "weather", key = "#zipCode")
     public WeatherResponse getWeatherByZip(String zipCode) {
@@ -34,17 +31,18 @@ public class WeatherService {
 
             var weather = openMeteoClient.getWeather(location.lat, location.lon);
 
-            weather.zipCode = zipCode;
-            weather.location = location.display_name;
-            weather.latitude = location.lat;
-            weather.longitude = location.lon;
-            weather.fromCache = false;
+            weather.setZipCode(zipCode);
+            weather.setLocation(location.getDisplay_name());
+            weather.setLatitude(location.getLat());
+            weather.setLongitude(location.getLon());
+            weather.setFromCache(false);
 
             return weather;
 
         } catch (CepNotFoundException | GeolocationApiException | WeatherApiException e) {
             throw e;
         } catch (Exception e) {
+            log.error("Erro inesperado ao consultar o clima para o CEP {}: {}", zipCode, e.getMessage(), e);
             throw new GeneralServiceException(e.getMessage());
         }
     }

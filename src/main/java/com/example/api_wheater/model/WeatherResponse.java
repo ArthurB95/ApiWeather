@@ -1,7 +1,10 @@
 package com.example.api_wheater.model;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class WeatherResponse {
     public String zipCode;
     public String location;

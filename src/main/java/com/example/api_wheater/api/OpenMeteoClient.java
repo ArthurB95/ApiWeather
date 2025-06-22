@@ -3,6 +3,8 @@ package com.example.api_wheater.api;
 import com.example.api_wheater.config.OpenMeteoProperties;
 import com.example.api_wheater.exception.WeatherApiException;
 import com.example.api_wheater.model.WeatherResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -11,15 +13,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class OpenMeteoClient {
     private final RestTemplate restTemplate;
     private final OpenMeteoProperties openMeteoProperties;
-
-    public OpenMeteoClient(RestTemplate restTemplate, OpenMeteoProperties openMeteoProperties) {
-        this.restTemplate = restTemplate;
-        this.openMeteoProperties = openMeteoProperties;
-    }
 
     public WeatherResponse getWeather(double lat, double lon) {
         try {
@@ -42,8 +41,8 @@ public class OpenMeteoClient {
             var max = daily.getJSONArray("temperature_2m_max");
             var dates = daily.getJSONArray("time");
 
-            response.minTemperature = min.getDouble(0);
-            response.maxTemperature = max.getDouble(0);
+            response.setMinTemperature(min.getDouble(0));
+            response.setMaxTemperature(max.getDouble(0));
 
             List<WeatherResponse.Forecast> forecasts = new ArrayList<>();
             for (int i = 0; i < dates.length(); i++) {
@@ -57,6 +56,7 @@ public class OpenMeteoClient {
 
             return response;
         } catch (Exception e) {
+            log.error("Erro ao chamar OpenMeteo API: {}", e.getMessage(), e);
             throw new WeatherApiException(e.getMessage());
         }
     }
